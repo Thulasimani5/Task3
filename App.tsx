@@ -1,10 +1,14 @@
 // App.js
 import React from 'react';
-import Navigation from './src/navigation/Navigation'
+import { Provider } from 'react-redux';
+import store from './src/store/Store';
+import Navigation from './src/navigation/Navigation';
 
 const App = () => {
   return (
-    <Navigation/>
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
   );
 };
 

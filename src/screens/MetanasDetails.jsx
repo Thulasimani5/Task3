@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Text, View, Image, StatusBar, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  Image,
+  StatusBar,
+  FlatList,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import BackArrow from '../assets/icons/BackArrow';
 import DownArrow from '../assets/icons/DownArrow';
 import Topic from '../components/Topic';
@@ -7,35 +17,82 @@ import Checkbox from '../components/CheckBox';
 import Add from '../assets/icons/Add';
 import SlideModal from '../components/SlideModal';
 import Send from '../assets/icons/Send';
+import MembersModal from '../components/MembersModal';
+import MembersSection from '../components/MemberSection';
+import {addExpense} from '../store/reducers/ExpenseSlice';
+import useCommentStore from '../store/CommentStore';
 import styles from './MetanasDetailsStyles';
+import {useDispatch, useSelector} from 'react-redux';
 
-const MetanasDetails = ({ route, navigation }) => {
-  const { title, id, date, status } = route.params;
+const MetanasDetails = ({route, navigation}) => {
+  const {title, id, date, status} = route.params;
+
+  const dispatch = useDispatch();
+  const expenses = useSelector(state => state.expenses?.expenses || []);
+  const {comments, addComment} = useCommentStore();
+
   const [modalVisible, setModalVisible] = useState(false);
-  const [expenses, setExpenses] = useState([]);
   const [expanded, setExpanded] = useState(false);
+  const [isModalVisible1, setModalVisible1] = useState(false);
+  const [comment, setComment] = useState('');
+
+  const defaultComments = [
+    {
+      username: 'Alice',
+      text: 'This is a default comment wedgyqdw uwedg',
+      time: '2h ago',
+    },
+    {username: 'Bob', text: 'This is a default comment 2', time: '1h ago'},
+  ];
+
+  React.useEffect(() => {
+    if (comments.length === 0) {
+      defaultComments.forEach(defaultComment => addComment(defaultComment));
+    }
+  }, [comments, addComment]);
 
   const toggleExpanded = () => setExpanded(!expanded);
+  const toggleModal = () => setModalVisible(!modalVisible);
+  const toggleModal1 = () => setModalVisible1(!isModalVisible1);
 
-  const handleSave = (expenseName, expenseDate, selectedCategory, selectedCurrency, amount, description) => {
-    const newExpense = { expenseName, expenseDate, selectedCategory, selectedCurrency, amount, description };
-    setExpenses([...expenses, newExpense]);
+  const checkboxLabels = [
+    {id: 1, label: 'Accept terms and conditions'},
+    {id: 2, label: 'Subscribe to newsletter'},
+    {id: 3, label: 'Complete profile setup'},
+  ];
+
+  const handleSave = (
+    expenseName,
+    expenseDate,
+    selectedCategory,
+    selectedCurrency,
+    amount,
+    description,
+  ) => {
+    const newExpense = {
+      expenseName,
+      expenseDate,
+      selectedCategory,
+      selectedCurrency,
+      amount: Number(amount),
+      description,
+    };
+    dispatch(addExpense(newExpense));
     setModalVisible(false);
   };
 
-  const toggleModal = () => setModalVisible(!modalVisible);
-
-  const checkboxLabels = [
-    { id: 1, label: 'Accept terms and conditions' },
-    { id: 2, label: 'Subscribe to newsletter' },
-    { id: 3, label: 'Complete profile setup' },
-    { id: 4, label: 'Complete profile setup' },
-  ];
+  const handleAddComment = () => {
+    if (comment.trim()) {
+      const newComment = {username: 'User', text: comment, time: 'Just now'};
+      addComment(newComment);
+      setComment('');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor='#f0f0f0' barStyle='dark-content' />
-      <View style={{ flexDirection: 'row' }}>
+      <StatusBar backgroundColor="#f0f0f0" barStyle="dark-content" />
+      <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <BackArrow />
         </TouchableOpacity>
@@ -43,25 +100,29 @@ const MetanasDetails = ({ route, navigation }) => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'row'}}>
               <Text style={styles.tex1}>Task Info</Text>
               <Text style={styles.dot}>•</Text>
-              <Text style={{ top: 2, left: 2 }}>{date}</Text>
+              <Text style={{top: 2, left: 2}}>{date}</Text>
             </View>
             <View style={styles.all}>
-              <Text style={{ fontSize: 12, color: '#0C356A' }}>{status}</Text>
+              <Text style={{fontSize: 12, color: '#0C356A'}}>{status}</Text>
               <DownArrow />
             </View>
           </View>
           <Text style={styles.text1}>Description</Text>
           <Text style={styles.text} numberOfLines={expanded ? 0 : 2}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat voluptates ea impedit eos, rem sed, quasi odit, fugiat nisi quas minima error voluptatem modi et quidem alias sapiente tempora. Sed.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat
+            voluptates ea impedit eos, rem sed, quasi odit, fugiat nisi quas
+            minima error voluptatem modi et quidem alias sapiente tempora. Sed.
           </Text>
           <TouchableOpacity onPress={toggleExpanded}>
-            <Text style={styles.seeMore}>{expanded ? 'See Less' : 'See More'}</Text>
+            <Text style={styles.seeMore}>
+              {expanded ? 'See Less' : 'See More'}
+            </Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
               <Text style={styles.tex2}>ID</Text>
               <Text style={styles.text2}>ID {id}</Text>
@@ -78,7 +139,7 @@ const MetanasDetails = ({ route, navigation }) => {
         </View>
         <View style={styles.card}>
           <Topic title="Check list" number={checkboxLabels.length} />
-          {checkboxLabels.map((item) => (
+          {checkboxLabels.map(item => (
             <View key={item.id}>
               <Checkbox label={item.label} />
               <View style={styles.separator} />
@@ -86,7 +147,7 @@ const MetanasDetails = ({ route, navigation }) => {
           ))}
         </View>
         <View style={styles.card}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Topic title="Log expense" number={expenses.length} />
             <TouchableOpacity onPress={toggleModal}>
               <Add />
@@ -94,52 +155,82 @@ const MetanasDetails = ({ route, navigation }) => {
           </View>
           <FlatList
             data={expenses}
-            renderItem={({ item, index }) => (
+            renderItem={({item, index}) => (
               <View>
                 <View style={styles.expenseCard}>
                   <Text style={styles.expenseText1}>{item.expenseName}</Text>
                   <Text style={styles.dot}>•</Text>
                   <Text style={styles.expenseText}>{item.expenseDate}</Text>
                   <Text style={styles.dot}>•</Text>
-                  <Text style={styles.expenseText}>{item.selectedCurrency}</Text>
-                  <Text style={styles.expenseText}>{item.amount}</Text>
+                  <Text style={styles.expenseText}>
+                    {item.selectedCurrency}
+                  </Text>
+                  <Text style={styles.expenseText}> {item.amount}</Text>
                 </View>
-                {index < expenses.length - 1 && <View style={styles.separator} />}
+                {index < expenses.length - 1 && (
+                  <View style={styles.separator} />
+                )}
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-        <View style={[styles.card, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-          <Text style={[styles.tex1, { top: 9 }]}>Users</Text>
-          <View style={[styles.imageContainer, { flexDirection: 'row', marginRight: 25 }]}>
-            <Image source={require('../assets/images/Boy.png')} style={{ height: 38, width: 38 }} />
-            <Image source={require('../assets/images/Boy.png')} style={{ marginLeft: -5, height: 38, width: 38 }} />
-            <View style={styles.counterContainer}>
-              <Text style={styles.counterText}>+{5}</Text>
-            </View>
-          </View>
-        </View>
+        <MembersSection title="Users" count="5" toggleModal={toggleModal1} />
+        <MembersModal isVisible={isModalVisible1} onClose={toggleModal1} />
         <View style={styles.card}>
           <Text style={styles.tex1}>Comments</Text>
-          {Array(2).fill().map((_, index) => (
-            <View style={{ flexDirection: 'row', marginTop: 15 }} key={index}>
-              <Image source={require('../assets/images/Boy.png')} style={{ height: 38, width: 38, top: 10 }} />
-              <View>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ fontSize: 14, color: '#02111A', fontWeight: '500', marginLeft: 10 }}>Hamza</Text>
-                  <Text style={{ fontSize: 13, color: '#4E585E', fontWeight: '400', marginLeft: 170 }}>1 day ago</Text>
+          {comments.map((item, index) => (
+            <View style={{flexDirection: 'row', marginTop: 15}} key={index}>
+              <Image
+                source={require('../assets/images/Boy.png')}
+                style={{height: 38, width: 38, top: 4}}
+              />
+              <View style={{flex: 1, marginLeft: 10}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{fontSize: 14, color: '#02111A', fontWeight: '500'}}>
+                    {item.username}
+                  </Text>
+                  <Text
+                    style={{fontSize: 13, color: '#4E585E', fontWeight: '400'}}>
+                    {item.time}
+                  </Text>
                 </View>
-                <Text style={{ fontSize: 13, color: '#4E585E', fontWeight: '400', marginLeft: 10, marginTop: 5 }}>hatrum guywec gycoqcwv cgiycqw ygcoqwgvc bciqwvswd v cvwcv.</Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: '#4E585E',
+                    fontWeight: '400',
+                    marginTop: 5,
+                  }}>
+                  {item.text}
+                </Text>
               </View>
             </View>
           ))}
-          <View style={styles.card2}>
-            <Text style={{ color: '#6A7175', fontSize: 14, left: 10 }}>Add comments</Text>
+          <TouchableOpacity
+            onPress={handleAddComment}
+            style={{top: 37, zIndex: 100, left: 280}}>
             <Send />
-          </View>
+          </TouchableOpacity>
+          <TextInput
+            style={styles.card2}
+            value={comment}
+            onChangeText={setComment}
+            placeholder="Add comments"
+          />
         </View>
-        <SlideModal visible={modalVisible} onClose={toggleModal} onSave={handleSave} />
+
+        <SlideModal
+          visible={modalVisible}
+          onClose={toggleModal}
+          onSave={handleSave}
+        />
       </ScrollView>
     </SafeAreaView>
   );

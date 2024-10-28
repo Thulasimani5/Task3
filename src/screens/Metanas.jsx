@@ -96,8 +96,8 @@ const Metanas = () => {
             ))}
           </View>
           
-          <TouchableOpacity onPress={toggleModal}>
-            <View style={[styles.card, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+          <TouchableOpacity onPress={toggleModal} style={[styles.card, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+           
               <Text style={[styles.tex1, { top: 9 }]}>Members</Text>
               <View style={[styles.imageContainer, { flexDirection: 'row', marginRight: 25 }]}>
                 <Image source={require('../assets/images/Boy.png')} style={{ height: 38, width: 38 }} />
@@ -106,7 +106,6 @@ const Metanas = () => {
                   <Text style={styles.counterText}>+{count}</Text>
                 </View>
               </View>
-            </View>
           </TouchableOpacity>
 
           <MembersModal isVisible={isModalVisible} onClose={toggleModal} />
@@ -126,11 +125,11 @@ const Metanas = () => {
               ))}
             </ScrollView>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Documents')}>
-          <View style={[styles.card, { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, marginBottom: 30 }]}>
+          <TouchableOpacity onPress={() => navigation.navigate('Documents')} style={[styles.card, { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, marginBottom: 30 }]}>
+          
             <Topic title="Documents" number={26} />
             <FrontArrow style={{ top: 5 }} />
-          </View>
+          
           </TouchableOpacity>
         </ScrollView>
       </View>

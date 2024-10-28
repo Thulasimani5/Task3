@@ -1,13 +1,13 @@
 import {  StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
-  head: {
-    fontSize: 18,
-    fontFamily: 'Poppins-SemiBold',
-    color: '#02111A',
-    fontWeight: '700',
-    marginTop: 5,
-    paddingHorizontal: 10,
-  },
+    head: {
+      fontSize: 18,
+      fontFamily: 'Poppins-SemiBold',
+      color: '#02111A',
+      fontWeight: '700',
+      marginTop: 5,
+      paddingHorizontal: 10,
+    },
     text6:{
       fontSize: 14,
       color: '#4E585E',

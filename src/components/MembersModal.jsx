@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, SafeAreaView } from 'react-native';
 import styles  from './MemdersModalStyles';
 const MembersModal = ({ isVisible, onClose }) => {
   const members = [
@@ -24,6 +24,7 @@ const MembersModal = ({ isVisible, onClose }) => {
   ];
 
   return (
+    <SafeAreaView>
     <Modal transparent={true} visible={isVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
@@ -47,6 +48,7 @@ const MembersModal = ({ isVisible, onClose }) => {
         </View>
       </View>
     </Modal>
+    </SafeAreaView>
   );
 };
 

@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
       fontFamily:'Poppins-Medium'
     },
     text1: {
+      
       fontSize: 12,
       color: '#6A7175',
       fontFamily:'Poppins-Regular'
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
       fontSize: 12,
       color: '#6A7175',
       fontWeight: '400',
+      top:2.5
     },
     expenseText1: {
       fontSize: 14,
@@ -65,10 +67,14 @@ const styles = StyleSheet.create({
     card2: {
       backgroundColor: '#F0F3F6',
       borderRadius: 30,
-      padding: 15,
-      marginVertical: 10,
       flexDirection:'row',
-      justifyContent:'space-between'
+      paddingHorizontal:10,
+      justifyContent:'space-between',
+      color: '#6A7175',
+       fontSize: 14,
+       zIndex:1,
+       paddingHorizontal:20
+       
     },
     tex1: {
       fontSize: 16,
@@ -82,16 +88,18 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 14,
       marginVertical: 10,
+      fontFamily:'Poppins-Medium'
     },
     tex2: {
       fontSize: 12,
-      color: '#555',
-      marginBottom:3
+      color: '#6A7175',
+      fontFamily:'Poppins-Regular'
     },
     text2: {
-      fontSize: 14,
-      color: '#4E585E',
-      fontFamily:'Poppins-Semibold'
+      fontSize: 12,
+     color: '#4E585E',
+     marginTop:5,
+     fontFamily:'Poppins-Regular'
     },
     all: {
       width: 100,

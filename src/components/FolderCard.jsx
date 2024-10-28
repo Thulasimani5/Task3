@@ -1,17 +1,21 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet,TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const FolderCard = ({ folderName, documentCount }) => {
+    const navigation = useNavigation();
     return (
-        <View style={styles.card}>
+        <TouchableOpacity onPress={() => navigation.navigate('Folder')} style={styles.card}>
+        <View >
             <Image 
                 source={require('../assets/images/Folder.png')} 
                 style={styles.image} 
                 resizeMode="contain" 
             /> 
-            <Text>{folderName}</Text>
+            <Text style={styles.foldername}>{folderName}</Text>
             <Text>{documentCount} Documents</Text>
         </View>
+        </TouchableOpacity>
     );
 };
 
@@ -25,13 +29,26 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 2,
         width: '47%',
+        height:104,
         marginVertical: 10,
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: 16,
+    },
+    foldername:{
+        color:'#02111A',
+        fontWeight:'700',
+        fontSize:12,
+        marginBottom:4,
+    },
+    documentname:{
+        color:'#4E585E',
+        fontSize:12,
+        fontWeight:'400'
     },
     image: {
         height: 25,
         width: 25,
+        marginBottom:12,
     },
 });
 
